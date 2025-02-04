@@ -115,6 +115,7 @@
         }
         document.addEventListener("DOMContentLoaded", function() {
             document.querySelector(".envelope").addEventListener("click", toggleEnvelope);
+            document.querySelector(".envelope").addEventListener("touchstart", toggleEnvelope);
             document.body.addEventListener("click", createHearts);
             document.body.addEventListener("touchstart", createHearts);
         });
