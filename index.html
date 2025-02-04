@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Birthday Envelope</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #ffdde1;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+            position: relative;
+            touch-action: manipulation;
+        }
+        .countdown {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #ff4757;
+            font-weight: bold;
+            text-align: center;
+        }
+        .envelope {
+            position: relative;
+            width: 90%;
+            max-width: 300px;
+            height: 200px;
+            background: #ff6b81;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+        .flap {
+            position: absolute;
+            top: 0;
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-bottom: 100px solid #ff4757;
+            transition: transform 0.5s;
+        }
+        .envelope:active .flap {
+            transform: rotateX(180deg);
+        }
+        .letter {
+            position: absolute;
+            width: 90%;
+            max-width: 260px;
+            height: 140px;
+            background: #fff;
+            border-radius: 5px;
+            text-align: center;
+            padding: 20px;
+            font-size: 18px;
+            transform: translateY(100%);
+            transition: transform 0.5s ease-in-out;
+        }
+        .envelope:active .letter {
+            transform: translateY(0);
+        }
+        .heart {
+            position: absolute;
+            font-size: 24px;
+            color: red;
+            opacity: 1;
+            animation: floatUp 1s ease-out forwards;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-100px); opacity: 0; }
+        }
+    </style>
+    <script>
+        function updateCountdown() {
+            const targetDate = new Date('February 13, ' + new Date().getFullYear() + ' 00:00:00').getTime();
+            const now = new Date().getTime();
+            const timeLeft = targetDate - now;
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+            document.getElementById('countdown').innerText = `${days} days ${hours} hours ${minutes} minutes ${seconds} seconds to your day`;
+        }
+        setInterval(updateCountdown, 1000);
+        window.onload = updateCountdown;
+
+        function createHearts(event) {
+            let x = event.clientX || (event.touches && event.touches[0]?.clientX);
+            let y = event.clientY || (event.touches && event.touches[0]?.clientY);
+            
+            if (x !== undefined && y !== undefined) {
+                for (let i = 0; i < 10; i++) {
+                    let heart = document.createElement("div");
+                    heart.classList.add("heart");
+                    heart.innerHTML = "❤️";
+                    document.body.appendChild(heart);
+                    heart.style.left = `${x + (Math.random() * 50 - 25)}px`;
+                    heart.style.top = `${y + (Math.random() * 50 - 25)}px`;
+                    setTimeout(() => { heart.remove(); }, 1000);
+                }
+            }
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+            document.body.addEventListener("click", createHearts);
+            document.body.addEventListener("touchstart", createHearts);
+        });
+    </script>
+</head>
+<body>
+    <div class="countdown" id="countdown"></div>
+    <div class="envelope">
+        <div class="flap"></div>
+        <div class="letter">
+            <h2>Happy Birthday My Love!</h2>
+            <p>Wishing you a day filled with love and joy! 💖</p>
+        </div>
+    </div>
+</body>
+</html>
